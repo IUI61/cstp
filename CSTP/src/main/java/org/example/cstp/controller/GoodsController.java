@@ -1,0 +1,30 @@
+package org.example.cstp.controller;
+
+import org.example.cstp.entity.Goods;
+import org.example.cstp.entity.Result;
+import org.example.cstp.service.GoodsService;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/goods")
+public class GoodsController {
+    private final GoodsService goodsService;
+    public GoodsController(GoodsService goodsService) {
+        this.goodsService = goodsService;
+    }
+
+    @GetMapping("/show")
+    public Result handleGoodsList(@RequestParam(value = "pageNum",defaultValue = "1") int pageNum) {
+        return Result.success(goodsService.handleGoodsList(pageNum));
+    }
+    @PostMapping("/issuance")
+    public Result goodsIssuance(@RequestPart(value = "file",required = false) MultipartFile[] file, @ModelAttribute Goods goods) {
+        goodsService.goodsIssuance(file,goods);
+        return Result.success();
+    }
+    @GetMapping("/detail")
+    public Result handleGoodsDetail(@RequestParam("id") Long goodsId) {
+        return Result.success(goodsService.handleGoodsDetail(goodsId));
+    }
+}
