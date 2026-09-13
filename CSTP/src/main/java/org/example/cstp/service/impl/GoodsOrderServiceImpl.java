@@ -76,7 +76,13 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
     }
     @Override
     public void updateGoodsOrderStatus(GoodsOrderStatusDto goodsOrderStatusDto) {
+        //校验当前登录人是不是这笔订单的买家/卖家
+        Long userId = currentUserId();
         Long orderId = goodsOrderStatusDto.getOrderId();
+        GoodsOrder goodsOrderAuthority = goodsOrderMapper.selectById(orderId);
+        if (!goodsOrderAuthority.getBuyerId().equals(userId) && !goodsOrderAuthority.getSellerId().equals(userId)) {
+            throw new BusinessException(403, "无权限修改这笔订单");
+        }
         Integer status = goodsOrderStatusDto.getStatus();
         String role = goodsOrderStatusDto.getRole();
         if (role.equals("release")){
