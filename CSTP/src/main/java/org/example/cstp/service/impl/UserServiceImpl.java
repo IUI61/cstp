@@ -8,8 +8,8 @@ import org.example.cstp.dto.LoginDto;
 import org.example.cstp.entity.User;
 import org.example.cstp.exception.BusinessException;
 import org.example.cstp.mapper.UserMapper;
+import org.example.cstp.service.FileStorageService;
 import org.example.cstp.service.UserService;
-import org.example.cstp.util.FileUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,15 +27,18 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper;
     private final StringRedisTemplate stringRedisTemplate;
+    private final FileStorageService fileStorageService;
 
     public UserServiceImpl(UserMapper userMapper,
                            BCryptPasswordEncoder passwordEncoder,
                            ObjectMapper objectMapper,
-                           StringRedisTemplate stringRedisTemplate) {
+                           StringRedisTemplate stringRedisTemplate,
+                           FileStorageService fileStorageService) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.objectMapper = objectMapper;
         this.stringRedisTemplate = stringRedisTemplate;
+        this.fileStorageService = fileStorageService;
 
     }
     // 用户注册
@@ -59,9 +62,9 @@ public class UserServiceImpl implements UserService {
         String rawPassword = user.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
-        // 上传头像
+        // 上传头像（走 FileStorageService：魔数校验 + 配置化目录）
         if(file != null){
-            user.setAvatar(FileUtil.imageUpload(file,"avatar"));
+            user.setAvatar(fileStorageService.storeImage(file, "avatar"));
         }
         userMapper.insert(user);
     }

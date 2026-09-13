@@ -4,10 +4,11 @@ spring:
   # 激活 local 配置：数据库密码等本地敏感信息放在 application-local.yml（该文件不提交到Git）
   profiles:
     active: local
-    #文件大小限制
+  #文件大小限制
   servlet:
     multipart:
-      max-file-size: 2MB
+      max-file-size: 2MB       # 单张图片上限
+      max-request-size: 15MB   # 一次可发多张图，请求体上限别用默认的 10MB
   # ========== MySQL 数据源 ==========
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -45,3 +46,9 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+
+# ========== 上传目录 ==========
+cstp:
+  upload:
+    # 默认放用户主目录，与启动目录（user.dir）无关；部署时可用环境变量覆盖，如 CSTP_UPLOAD_DIR=D:/data/cstp/uploads
+    base-dir: ${CSTP_UPLOAD_DIR:${user.home}/cstp/uploads}

@@ -1,68 +1,53 @@
 package org.example.cstp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.cstp.entity.Goods;
 import org.example.cstp.entity.GoodsImage;
 import org.example.cstp.exception.BusinessException;
 import org.example.cstp.mapper.GoodsImageMapper;
 import org.example.cstp.mapper.GoodsMapper;
+import org.example.cstp.service.FileStorageService;
+import org.example.cstp.service.GoodsCacheService;
 import org.example.cstp.service.GoodsService;
-import org.example.cstp.util.FileUtil;
 import org.example.cstp.vo.GoodsDetailVo;
 import org.example.cstp.vo.HomeGoodsVo;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.example.cstp.vo.PageResultVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Duration;
 import java.util.List;
 
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
     private final GoodsMapper goodsMapper;
-    private final StringRedisTemplate stringRedisTemplate;
     private final GoodsImageMapper goodsImageMapper;
-    private final ObjectMapper objectMapper;
+    private final GoodsCacheService goodsCacheService;
+    private final FileStorageService fileStorageService;
 
     public GoodsServiceImpl(GoodsMapper goodsMapper,
                             GoodsImageMapper goodsImageMapper,
-                            StringRedisTemplate stringRedisTemplate,
-                            ObjectMapper objectMapper) {
+                            GoodsCacheService goodsCacheService,
+                            FileStorageService fileStorageService) {
         this.goodsMapper = goodsMapper;
         this.goodsImageMapper = goodsImageMapper;
-        this.stringRedisTemplate = stringRedisTemplate;
-        this.objectMapper = objectMapper;
+        this.goodsCacheService = goodsCacheService;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
-    public IPage<HomeGoodsVo> handleGoodsList(int pageNum) {
-        String key = "goods:page:" + pageNum;
-        // 1. 查缓存
-        String cached = stringRedisTemplate.opsForValue().get(key);
+    public PageResultVo<HomeGoodsVo> handleGoodsList(int pageNum) {
+        // 先取版本号快照，回填时用同一个版本号，避免写到已作废的 key 上
+        long version = goodsCacheService.version();
+        PageResultVo<HomeGoodsVo> cached = goodsCacheService.getPage(version, pageNum);
         if (cached != null) {
-            try {
-                return objectMapper.readValue(cached, new TypeReference<Page<HomeGoodsVo>>() {});
-            } catch (JsonProcessingException e) {
-                throw new BusinessException(500, "缓存数据异常");
-            }
+            return cached;
         }
-        // 2. 查数据库
         Page<HomeGoodsVo> page = new Page<>(pageNum, 10);
-        IPage<HomeGoodsVo> result = goodsMapper.handleGoodsList(page, null);
-        // 3. 写缓存
-        try {
-            String json = objectMapper.writeValueAsString(result);
-            stringRedisTemplate.opsForValue().set(key, json, Duration.ofMinutes(30));
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(500, "序列化失败");
-        }
+        PageResultVo<HomeGoodsVo> result = PageResultVo.of(goodsMapper.handleGoodsList(page, null));
+        goodsCacheService.putPage(version, pageNum, result);
         return result;
     }
 
@@ -72,23 +57,25 @@ public class GoodsServiceImpl implements GoodsService {
         if(file == null || file.length == 0){
             throw new BusinessException(400, "图片不能为空");
         }
-        Goods newGoods = goods;
-        goodsMapper.insert(newGoods);
-        String coverUrl = FileUtil.imageUpload(file[0], "goods");
-        newGoods.setImage(coverUrl);
+        // 先把全部图片校验一遍再落盘：避免"第 3 张非法时前 2 张已存成孤儿文件"
+        fileStorageService.validateImages(file);
+        // 先上传封面再 insert：image 才能随插入一起落库（原代码 setImage 后未 updateById，字段一直是 null）
+        String coverUrl = fileStorageService.storeImage(file[0], "goods");
+        goods.setImage(coverUrl);
+        goodsMapper.insert(goods);
         GoodsImage coverImage = new GoodsImage();
-        coverImage.setGoodsId(newGoods.getId());
+        coverImage.setGoodsId(goods.getId());
         coverImage.setUrl(coverUrl);
         coverImage.setSort(0);
         goodsImageMapper.insert(coverImage);
         for(int i = 1; i < file.length; i++){
             GoodsImage goodsImage = new GoodsImage();
             goodsImage.setGoodsId(goods.getId());
-            goodsImage.setUrl(FileUtil.imageUpload(file[i], "goodsImage"));
+            goodsImage.setUrl(fileStorageService.storeImage(file[i], "goodsImage"));
             goodsImage.setSort(i);
             goodsImageMapper.insert(goodsImage);
         }
-        stringRedisTemplate.delete("goods:page:1");
+        goodsCacheService.invalidateList();
     }
 
     @Override

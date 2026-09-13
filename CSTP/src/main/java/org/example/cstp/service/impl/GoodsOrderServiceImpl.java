@@ -10,6 +10,7 @@ import org.example.cstp.entity.GoodsOrder;
 import org.example.cstp.exception.BusinessException;
 import org.example.cstp.mapper.GoodsMapper;
 import org.example.cstp.mapper.GoodsOrderMapper;
+import org.example.cstp.service.GoodsCacheService;
 import org.example.cstp.service.GoodsOrderService;
 import org.example.cstp.util.UserContext;
 import org.example.cstp.vo.HomeGoodsVo;
@@ -25,10 +26,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GoodsOrderServiceImpl implements GoodsOrderService {
     private final GoodsMapper goodsMapper;
     private final GoodsOrderMapper goodsOrderMapper;
+    private final GoodsCacheService goodsCacheService;
     public GoodsOrderServiceImpl(GoodsMapper goodsMapper,
-                                 GoodsOrderMapper goodsOrderMapper) {
+                                 GoodsOrderMapper goodsOrderMapper,
+                                 GoodsCacheService goodsCacheService) {
         this.goodsMapper = goodsMapper;
         this.goodsOrderMapper = goodsOrderMapper;
+        this.goodsCacheService = goodsCacheService;
     }
     @Override
     @Transactional
@@ -94,6 +98,8 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
                 goods.setStatus(0);
             }
             goodsMapper.updateById(goods);
+            // 上架/下架会改变首页在售列表（所有页都会错位），必须失效
+            goodsCacheService.invalidateList();
             return;
         }
         GoodsOrder goodsOrder = new GoodsOrder();
