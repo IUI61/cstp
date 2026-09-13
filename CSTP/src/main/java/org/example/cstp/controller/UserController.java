@@ -33,7 +33,6 @@ public class UserController {
     @Operation(summary = "用户登录")
     @PostMapping("/login")
     public Result userLogin(@Valid @RequestBody LoginDto loginDto) {
-        log.info("登入username: {}, password: {}", loginDto.getUsername(), loginDto.getPassword());
         Map<String, Object> map = userService.userLogin(loginDto);
         return Result.success(map);
     }
