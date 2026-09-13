@@ -33,9 +33,11 @@ public class UserController {
     @Operation(summary = "用户登录")
     @PostMapping("/login")
     public Result userLogin(@Valid @RequestBody LoginDto loginDto) {
+        log.info("用户登录");
         Map<String, Object> map = userService.userLogin(loginDto);
         return Result.success(map);
     }
+
 }
 
 
