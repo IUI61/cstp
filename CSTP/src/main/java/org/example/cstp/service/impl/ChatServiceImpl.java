@@ -73,6 +73,12 @@ public class ChatServiceImpl implements ChatService {
     }
     @Override
     public List<MessagesListVo> getMessagesList(Long conversationId) {
+        // 校验当前用户是不是该会话成员
+        Long userId = currentUserId();
+        Conversation conversation = conversationMapper.selectById(conversationId);
+        if (conversation == null || !(conversation.getMinId().equals(userId) || conversation.getMaxId().equals(userId))) {
+            throw new BusinessException(403, "无权限查看");
+        }
         List<MessagesListVo> messagesListVo = messageMapper.getMessagesList(conversationId);
         // 反转列表顺序
         Collections.reverse(messagesListVo);
