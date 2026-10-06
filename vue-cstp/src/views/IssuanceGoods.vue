@@ -34,7 +34,6 @@ const goodsSubmit = async () => {
   for (const file of form.issuanceImageList){
     formData.append('file', file)
   }
-  formData.append('userId',JSON.parse(localStorage.getItem('user')).id)
   formData.append('name', form.name)
   formData.append('price', form.price)
   formData.append('type', form.type)

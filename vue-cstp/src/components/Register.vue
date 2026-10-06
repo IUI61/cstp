@@ -27,7 +27,8 @@ const rules = {
   ],
   phone: [
     { required: true, message: '请输入手机号码', trigger: 'blur' },
-    { min: 11, max: 11, message: '长度为11个字符', trigger: 'blur' }
+    { min: 11, max: 11, message: '长度为11个字符', trigger: 'blur' },
+    {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur'}
   ]
 }
 const handleAvatarChange = (uploadFile) => {

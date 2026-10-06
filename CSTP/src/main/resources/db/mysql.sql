@@ -39,14 +39,14 @@ create table goods_image(
 create table conversation(
      id bigint not null primary key comment '会话id',
      goods_id bigint not null comment '关联商品id',
-     buyer_id bigint not null comment '买家id',
-     seller_id bigint not null comment '卖家id(冗余存,免每次查goods)',
+     min_id bigint not null comment '买家id',
+     max_id bigint not null comment '卖家id(冗余存,免每次查goods)',
      last_message varchar(500) comment '最后一条消息内容(会话列表展示用)',
      last_time datetime comment '最后一条消息时间',
      create_time datetime not null default current_timestamp,
      update_time datetime not null default current_timestamp on update current_timestamp,
      is_delete tinyint not null default 0,
-     unique key uk_goods_buyer(goods_id, buyer_id)  -- 防止重复建会话
+     unique key uk_min_max(min_id, max_id)  -- 防止重复建会话
 )comment '会话表';
 
 -- 消息表

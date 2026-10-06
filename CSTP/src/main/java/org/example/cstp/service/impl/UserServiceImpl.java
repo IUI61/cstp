@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cstp.dto.LoginDto;
+import org.example.cstp.dto.UserDto;
 import org.example.cstp.entity.User;
 import org.example.cstp.exception.BusinessException;
 import org.example.cstp.mapper.UserMapper;
@@ -44,7 +45,14 @@ public class UserServiceImpl implements UserService {
     // 用户注册
     @Override
     @Transactional
-    public void userRegister(MultipartFile file, User user){
+    public void userRegister(MultipartFile file, UserDto userDto){
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
+        user.setPhone(userDto.getPhone());
+        user.setName(userDto.getName());
+        user.setBirthday(userDto.getBirthday());
+        user.setGender(userDto.getGender());
         //检查用户名是否已存在
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUsername, user.getUsername());  // WHERE username = ?
@@ -88,7 +96,7 @@ public class UserServiceImpl implements UserService {
         try {
             String json = objectMapper.writeValueAsString(user);
             stringRedisTemplate.opsForValue().set("token:" + token, json, Duration.ofDays(7));
-            log.info("用户登录成功，生成的token为" + token);
+            log.info("用户登录成功");
             Map<String, Object> map = new HashMap<>();
             map.put("token", token);
             map.put("user", user);

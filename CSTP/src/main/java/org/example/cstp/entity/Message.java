@@ -17,5 +17,5 @@ public class Message {
     private String content;
     private Integer isRead;
     private LocalDateTime createTime;
-    private Integer isDeleted;
+    private Integer isDelete;
 }

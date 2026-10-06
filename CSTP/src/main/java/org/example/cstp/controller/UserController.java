@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cstp.dto.LoginDto;
+import org.example.cstp.dto.UserDto;
 import org.example.cstp.entity.Result;
 import org.example.cstp.entity.User;
 import org.example.cstp.service.UserService;
@@ -26,8 +27,8 @@ public class UserController {
     }
     @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public Result userRegister(@RequestPart(value = "avatarFile",required = false) MultipartFile file, @ModelAttribute User user) {
-        userService.userRegister(file,user);
+    public Result userRegister(@RequestPart(value = "avatarFile",required = false) MultipartFile file,@Valid @ModelAttribute UserDto userDto) {
+        userService.userRegister(file,userDto);
         return Result.success();
     }
     @Operation(summary = "用户登录")

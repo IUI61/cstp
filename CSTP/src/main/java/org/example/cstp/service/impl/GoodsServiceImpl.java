@@ -2,6 +2,7 @@ package org.example.cstp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.example.cstp.dto.GoodsDto;
 import org.example.cstp.entity.Goods;
 import org.example.cstp.entity.GoodsImage;
 import org.example.cstp.exception.BusinessException;
@@ -10,6 +11,7 @@ import org.example.cstp.mapper.GoodsMapper;
 import org.example.cstp.service.FileStorageService;
 import org.example.cstp.service.GoodsCacheService;
 import org.example.cstp.service.GoodsService;
+import org.example.cstp.util.UserContext;
 import org.example.cstp.vo.GoodsDetailVo;
 import org.example.cstp.vo.HomeGoodsVo;
 import org.example.cstp.vo.PageResultVo;
@@ -53,7 +55,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     @Transactional
-    public void goodsIssuance(MultipartFile[] file, Goods goods) {
+    public void goodsIssuance(MultipartFile[] file, GoodsDto goodsDto) {
         if(file == null || file.length == 0){
             throw new BusinessException(400, "图片不能为空");
         }
@@ -61,7 +63,13 @@ public class GoodsServiceImpl implements GoodsService {
         fileStorageService.validateImages(file);
         // 先上传封面再 insert：image 才能随插入一起落库（原代码 setImage 后未 updateById，字段一直是 null）
         String coverUrl = fileStorageService.storeImage(file[0], "goods");
+        Goods goods = new Goods();
+        goods.setName(goodsDto.getName());
+        goods.setPrice(goodsDto.getPrice());
+        goods.setType(goodsDto.getType());
+        goods.setDescription(goodsDto.getDescription());
         goods.setImage(coverUrl);
+        goods.setUserId(UserContext.getId());
         goodsMapper.insert(goods);
         GoodsImage coverImage = new GoodsImage();
         coverImage.setGoodsId(goods.getId());

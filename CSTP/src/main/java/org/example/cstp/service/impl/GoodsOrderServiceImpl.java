@@ -1,6 +1,7 @@
 package org.example.cstp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.example.cstp.dto.GoodsOrderStatusDto;
@@ -42,6 +43,19 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
         Goods goods = goodsMapper.selectById(submitOrderDto.getGoodsId());
         if (goods == null || goods.getStatus() != 1) {
             throw new BusinessException(400, "商品不存在或已下架");
+        }
+        //检查商品买家和卖家是否是同一个人
+        if (goods.getUserId().equals(buyerId)) {
+            throw new BusinessException(400, "不能购买自己的商品");
+        }
+        //更新商品状态，防止多人同时下单
+        LambdaUpdateWrapper<Goods> wrapper = new LambdaUpdateWrapper<Goods>()
+                .eq(Goods::getId, submitOrderDto.getGoodsId())
+                .eq(Goods::getStatus, 1)
+                .set(Goods::getStatus, 2);
+        int row = goodsMapper.update(null, wrapper);
+        if (row == 0) {
+            throw new BusinessException(400, "商品被抢购");
         }
         //检查是否重复下单
         Long count = goodsOrderMapper.selectCount(new LambdaQueryWrapper<GoodsOrder>()

@@ -1,5 +1,7 @@
 package org.example.cstp.controller;
 
+import jakarta.validation.Valid;
+import org.example.cstp.dto.GoodsDto;
 import org.example.cstp.entity.Goods;
 import org.example.cstp.entity.Result;
 import org.example.cstp.service.GoodsService;
@@ -19,8 +21,8 @@ public class GoodsController {
         return Result.success(goodsService.handleGoodsList(pageNum));
     }
     @PostMapping("/issuance")
-    public Result goodsIssuance(@RequestPart(value = "file",required = false) MultipartFile[] file, @ModelAttribute Goods goods) {
-        goodsService.goodsIssuance(file,goods);
+    public Result goodsIssuance(@RequestPart(value = "file",required = false) MultipartFile[] file,@Valid @ModelAttribute GoodsDto goodsDto) {
+        goodsService.goodsIssuance(file,goodsDto);
         return Result.success();
     }
     @GetMapping("/detail")

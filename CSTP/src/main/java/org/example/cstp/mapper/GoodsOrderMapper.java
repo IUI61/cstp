@@ -7,6 +7,5 @@ import org.example.cstp.entity.GoodsOrder;
 import org.example.cstp.vo.OrderListVo;
 
 public interface GoodsOrderMapper extends BaseMapper<GoodsOrder> {
-    IPage<OrderListVo> buyList(Page<OrderListVo> page, Long userId);
     IPage<OrderListVo> ordersList(Page<OrderListVo> page, Long userId, String role);
 }
