@@ -1,0 +1,21 @@
+package org.examole.goodsservice.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class GoodsDto {
+    @NotBlank(message = "商品名称不能为空")
+    private String name;
+    @NotNull(message = "商品价格不能为空")
+    @Positive(message = "商品价格必须为正数")
+    private BigDecimal price;
+    @NotBlank(message = "商品类型不能为空")
+    private String type;
+    @NotBlank(message = "商品描述不能为空")
+    private String description;
+}
