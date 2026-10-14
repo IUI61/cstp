@@ -1,6 +1,6 @@
-package org.example.cstp.exception;
+package org.example.userservice.exception;
 
-import org.example.cstp.entity.Result;
+import org.example.userservice.entity.Result;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

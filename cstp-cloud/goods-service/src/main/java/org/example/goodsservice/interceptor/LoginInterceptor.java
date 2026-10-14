@@ -1,10 +1,10 @@
-package org.examole.goodsservice.interceptor;
+package org.example.goodsservice.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.goodsservice.entity.User;
+import org.example.goodsservice.entity.CurrentUser;
 import org.example.goodsservice.util.UserContext;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
        try{
-           UserContext.setUser(objectMapper.readValue(json, User.class));
+           UserContext.setUser(objectMapper.readValue(json, CurrentUser.class));
            return true;
        }catch (JsonProcessingException e){
            response.setStatus(401);

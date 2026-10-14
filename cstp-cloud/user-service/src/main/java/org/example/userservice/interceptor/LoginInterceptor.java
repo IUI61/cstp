@@ -1,14 +1,14 @@
-package org.example.cstp.interceptor;
+package org.example.userservice.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.cstp.entity.User;
-import org.example.cstp.util.UserContext;
+import org.example.userservice.entity.User;
+import org.example.userservice.util.UserContext;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {

@@ -1,9 +1,7 @@
-package org.example.cstp.mapper;
+package org.example.userservice.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.example.cstp.entity.User;
-import org.example.cstp.vo.ConversationsListVo;
+import org.example.userservice.entity.User;
 
 public interface UserMapper extends BaseMapper<User> {
-    ConversationsListVo findById(Long id);
 }

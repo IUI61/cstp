@@ -1,4 +1,4 @@
-package org.example.cstp.exception;
+package org.example.userservice.exception;
 
 
 public class BusinessException extends RuntimeException {

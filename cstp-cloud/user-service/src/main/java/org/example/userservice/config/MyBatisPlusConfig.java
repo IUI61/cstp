@@ -1,4 +1,4 @@
-package org.example.cstp.config;
+package org.example.userservice.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

@@ -1,4 +1,4 @@
-package org.examole.goodsservice.exception;
+package org.example.goodsservice.exception;
 
 import org.example.goodsservice.entity.Result;
 import org.example.goodsservice.exception.BusinessException;

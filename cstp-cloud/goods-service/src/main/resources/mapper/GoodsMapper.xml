@@ -3,11 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace 必须指向你的 Mapper 接口全限定类名 -->
-<mapper namespace="org.example.cstp.mapper.GoodsMapper">
+<mapper namespace="org.example.goodsservice.mapper.GoodsMapper">
 
     <!-- id = Mapper 接口中的方法名 -->
     <!-- resultType = 返回值类型（全限定类名） -->
-    <select id="handleGoodsList" resultType="org.example.cstp.vo.HomeGoodsVo">
+    <select id="handleGoodsList" resultType="org.example.goodsservice.vo.HomeGoodsVo">
         select g.id,g.name as goodsName,g.price,g.status,gi.url as goodsImage
         from goods g
             left join goods_image gi on g.id = gi.goods_id and gi.sort = 0 and gi.is_delete = 0
@@ -21,7 +21,7 @@
         </where>
         order by g.create_time desc
     </select>
-    <select id="handleGoodsDetail" resultType="org.example.cstp.vo.GoodsDetailVo">
+    <select id="handleGoodsDetail" resultType="org.example.goodsservice.vo.GoodsDetailVo">
         select g.name,g.price,g.description,g.type,u.id sellerId,u.name sellerName,u.avatar from goods g left join user u
             on g.user_id = u.id
         where g.id = #{id}

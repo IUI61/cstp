@@ -1,4 +1,4 @@
-package org.examole.goodsservice.mapper;
+package org.example.goodsservice.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.example.goodsservice.entity.GoodsImage;

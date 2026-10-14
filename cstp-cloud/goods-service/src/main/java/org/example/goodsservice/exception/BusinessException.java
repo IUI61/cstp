@@ -1,4 +1,4 @@
-package org.examole.goodsservice.exception;
+package org.example.goodsservice.exception;
 
 
 public class BusinessException extends RuntimeException {

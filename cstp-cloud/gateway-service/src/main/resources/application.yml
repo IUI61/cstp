@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        # 用户服务路由
+        - id: user-route
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=1
+        # 商品服务路由
+        - id: goods-route
+          uri: lb://goods-service
+          predicates:
+            - Path=/api/goods/**
+          filters:
+            - StripPrefix=1
+        # 静态资源（商品图片/头像）
+        - id: uploads-route
+          uri: lb://goods-service
+          predicates:
+            - Path=/uploads/**
+        # 订单服务路由
+        - id: order-route
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=1

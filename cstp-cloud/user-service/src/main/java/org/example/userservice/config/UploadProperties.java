@@ -1,4 +1,4 @@
-package org.example.cstp.config;
+package org.example.userservice.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,12 +8,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * 上传目录配置：读取 application.yml 中 cstp.upload 前缀的配置
+ * 上传目录配置：读取 application.yml 中 userservice.upload 前缀的配置
  * 作用：上传逻辑和静态资源映射统一从这里取路径，避免各自拼 user.dir
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "cstp.upload")
+@ConfigurationProperties(prefix = "userservice.upload")
 public class UploadProperties {
     /** 上传根目录，application.yml 中配置；这里只是兜底默认值 */
     private String baseDir = "uploads";

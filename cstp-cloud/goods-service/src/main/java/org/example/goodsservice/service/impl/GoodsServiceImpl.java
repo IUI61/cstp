@@ -1,4 +1,4 @@
-package org.examole.goodsservice.service.impl;
+package org.example.goodsservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -69,7 +69,7 @@ public class GoodsServiceImpl implements GoodsService {
         goods.setType(goodsDto.getType());
         goods.setDescription(goodsDto.getDescription());
         goods.setImage(coverUrl);
-        goods.setUserId(UserContext.getId());
+        goods.setUserId(UserContext.getUserId());
         goodsMapper.insert(goods);
         GoodsImage coverImage = new GoodsImage();
         coverImage.setGoodsId(goods.getId());
@@ -95,5 +95,9 @@ public class GoodsServiceImpl implements GoodsService {
         List<String> imageList = goodsImageMapper.selectList(wrapper).stream().map(GoodsImage::getUrl).toList();
         goodsDetailVo.setImageList(imageList);
         return goodsDetailVo;
+    }
+    @Override
+    public Goods getById(Long id) {
+        return goodsMapper.selectById(id);
     }
 }

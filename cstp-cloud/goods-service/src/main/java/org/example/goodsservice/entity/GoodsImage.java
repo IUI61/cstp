@@ -1,4 +1,4 @@
-package org.examole.goodsservice.entity;
+package org.example.goodsservice.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

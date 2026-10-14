@@ -1,4 +1,4 @@
-package org.examole.goodsservice.service.impl;
+package org.example.goodsservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

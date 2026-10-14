@@ -1,6 +1,7 @@
-package org.examole.goodsservice.service;
+package org.example.goodsservice.service;
 
 import org.example.goodsservice.dto.GoodsDto;
+import org.example.goodsservice.entity.Goods;
 import org.example.goodsservice.vo.GoodsDetailVo;
 import org.example.goodsservice.vo.HomeGoodsVo;
 import org.example.goodsservice.vo.PageResultVo;
@@ -11,4 +12,6 @@ public interface GoodsService {
     void goodsIssuance(MultipartFile[] file, GoodsDto goodsDto);
 
     GoodsDetailVo handleGoodsDetail(Long goodsId);
+
+    Goods getById(Long id);
 }

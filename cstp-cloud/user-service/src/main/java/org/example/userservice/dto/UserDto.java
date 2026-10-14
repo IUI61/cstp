@@ -1,4 +1,4 @@
-package org.example.cstp.dto;
+package org.example.userservice.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

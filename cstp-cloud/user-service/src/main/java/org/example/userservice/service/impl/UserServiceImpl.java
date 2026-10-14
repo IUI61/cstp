@@ -1,16 +1,16 @@
-package org.example.cstp.service.impl;
+package org.example.userservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.example.cstp.dto.LoginDto;
-import org.example.cstp.dto.UserDto;
-import org.example.cstp.entity.User;
-import org.example.cstp.exception.BusinessException;
-import org.example.cstp.mapper.UserMapper;
-import org.example.cstp.service.FileStorageService;
-import org.example.cstp.service.UserService;
+import org.example.userservice.dto.LoginDto;
+import org.example.userservice.dto.UserDto;
+import org.example.userservice.entity.User;
+import org.example.userservice.exception.BusinessException;
+import org.example.userservice.mapper.UserMapper;
+import org.example.userservice.service.FileStorageService;
+import org.example.userservice.service.UserService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -104,5 +106,9 @@ public class UserServiceImpl implements UserService {
         } catch (JsonProcessingException e) {
             throw new BusinessException(500, "序列化用户信息失败");
         }
+    }
+    @Override
+    public List<User> listByIds(List<Long> ids) {
+        return userMapper.selectBatchIds(ids);
     }
 }

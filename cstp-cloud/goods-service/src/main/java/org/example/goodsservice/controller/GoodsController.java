@@ -1,4 +1,4 @@
-package org.examole.goodsservice.controller;
+package org.example.goodsservice.controller;
 
 import jakarta.validation.Valid;
 import org.example.goodsservice.dto.GoodsDto;

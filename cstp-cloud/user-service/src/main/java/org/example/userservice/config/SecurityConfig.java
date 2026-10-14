@@ -1,4 +1,4 @@
-package org.example.cstp.config;
+package org.example.userservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -1,4 +1,4 @@
-package org.examole.goodsservice.config;
+package org.example.goodsservice.config;
 
 import org.example.goodsservice.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/user/register",
                         "/uploads/**",
                         "/goods/show",
+                        "/goods/inner/**",
                         "/doc.html",
                         "/webjars/**",
                         "/v3/api-docs/**",

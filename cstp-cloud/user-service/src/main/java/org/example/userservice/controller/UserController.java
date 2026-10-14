@@ -1,14 +1,13 @@
-package org.example.cstp.controller;
+package org.example.userservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.example.cstp.dto.LoginDto;
-import org.example.cstp.dto.UserDto;
-import org.example.cstp.entity.Result;
-import org.example.cstp.entity.User;
-import org.example.cstp.service.UserService;
+import org.example.userservice.dto.LoginDto;
+import org.example.userservice.dto.UserDto;
+import org.example.userservice.entity.Result;
+import org.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

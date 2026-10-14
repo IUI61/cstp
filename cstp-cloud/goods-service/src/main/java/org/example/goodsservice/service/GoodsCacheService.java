@@ -1,4 +1,4 @@
-package org.examole.goodsservice.service;
+package org.example.goodsservice.service;
 
 import org.example.goodsservice.vo.HomeGoodsVo;
 import org.example.goodsservice.vo.PageResultVo;

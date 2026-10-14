@@ -1,8 +1,8 @@
-package org.example.cstp.service.impl;
+package org.example.userservice.service.impl;
 
-import org.example.cstp.config.UploadProperties;
-import org.example.cstp.exception.BusinessException;
-import org.example.cstp.service.FileStorageService;
+import org.example.userservice.config.UploadProperties;
+import org.example.userservice.exception.BusinessException;
+import org.example.userservice.service.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

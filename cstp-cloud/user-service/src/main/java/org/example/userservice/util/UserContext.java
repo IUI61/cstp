@@ -1,6 +1,6 @@
-package org.example.cstp.util;
+package org.example.userservice.util;
 
-import org.example.cstp.entity.User;
+import org.example.userservice.entity.User;
 
 public class UserContext {
     private static final ThreadLocal<User> USER_CONTEXT = new ThreadLocal<>();

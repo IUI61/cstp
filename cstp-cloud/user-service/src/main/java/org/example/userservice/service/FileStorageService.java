@@ -1,4 +1,4 @@
-package org.example.cstp.service;
+package org.example.userservice.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

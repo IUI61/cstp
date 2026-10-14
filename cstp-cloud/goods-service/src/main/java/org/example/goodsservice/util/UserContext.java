@@ -1,20 +1,13 @@
-package org.examole.goodsservice.util;
+package org.example.goodsservice.util;
 
-import org.example.goodsservice.entity.User;
+import org.example.goodsservice.entity.CurrentUser;
 
 public class UserContext {
-    private static final ThreadLocal<User> USER_CONTEXT = new ThreadLocal<>();
-    public static void setUser(User user) {
-        USER_CONTEXT.set(user);
-    }
-    public static User getUser() {
-        return USER_CONTEXT.get();
-    }
-    public static Long getId() {
-        User user = USER_CONTEXT.get();
-        return user == null ? null : user.getId();
-    }
-    public static void removeUser() {
-        USER_CONTEXT.remove();
-    }
+    private static final ThreadLocal<CurrentUser> holder = new ThreadLocal<>();
+
+    public static void setUser(CurrentUser user) { holder.set(user); }
+    public static CurrentUser getUser() { return holder.get(); }
+    public static Long getUserId() { CurrentUser u = holder.get(); return u == null ? null : u.getId(); }
+    public static void removeUser() { holder.remove(); }
 }
+

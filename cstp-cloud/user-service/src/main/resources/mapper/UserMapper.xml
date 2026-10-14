@@ -3,14 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- namespace 必须指向你的 Mapper 接口全限定类名 -->
-<mapper namespace="org.example.cstp.mapper.UserMapper">
+<mapper namespace="org.example.userservice.mapper.UserMapper">
     <!-- id = Mapper 接口中的方法名 -->
     <!-- resultType = 返回值类型（全限定类名） -->
-    <select id="findById" resultType="org.example.cstp.vo.ConversationsListVo">
-        SELECT username hisName, avatar hisAvatar
-        FROM user
-        WHERE id = #{id}
-    </select>
 
 
 </mapper>

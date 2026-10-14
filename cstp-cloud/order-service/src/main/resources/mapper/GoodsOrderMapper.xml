@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.orderservice.mapper.GoodsOrderMapper">
+    <select id="ordersList" resultType="org.example.orderservice.vo.OrderListVo">
+        SELECT
+            g.id,
+            g.order_no,
+            g.goods_id,
+            g.goods_name,
+            g.goods_image,
+            g.price,
+            g.seller_id,
+            g.buyer_id,
+            g.receiver_name,
+            g.receiver_phone,
+            g.receiver_address,
+            g.status,
+            g.ship_company,
+            g.ship_no,
+            g.ship_time,
+            g.finish_time,
+            g.cancel_time,
+            g.create_time
+        FROM
+            goods_order g
+        <where>
+            <if test="role == 'buy'">
+                g.buyer_id = #{userId}
+            </if>
+            <if test="role == 'sell'">
+                g.seller_id = #{userId}
+            </if>
+        </where>
+        ORDER BY
+            g.create_time DESC
+    </select>
+</mapper>

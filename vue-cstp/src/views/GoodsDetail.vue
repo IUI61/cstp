@@ -58,7 +58,7 @@ const submitOrder = async () => {
     return
   }
   buying.value = true
-  const res = await server.post('/order/create', {goodsId:goodsId.value,
+  const res = await server.post('/orders/create', {goodsId:goodsId.value,
     buyerName:orderForm.buyerName,
     buyerPhone:orderForm.buyerPhone,
     buyerAddress:orderForm.buyerAddress})

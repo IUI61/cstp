@@ -1,4 +1,4 @@
-package org.examole.goodsservice.service.impl;
+package org.example.goodsservice.service.impl;
 
 import org.example.goodsservice.config.UploadProperties;
 import org.example.goodsservice.exception.BusinessException;

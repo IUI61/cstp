@@ -1,4 +1,4 @@
-package org.examole.goodsservice.vo;
+package org.example.goodsservice.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

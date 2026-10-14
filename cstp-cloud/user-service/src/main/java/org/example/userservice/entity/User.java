@@ -1,4 +1,4 @@
-package org.example.cstp.entity;
+package org.example.userservice.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;

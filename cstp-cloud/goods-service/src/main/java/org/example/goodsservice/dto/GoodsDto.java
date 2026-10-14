@@ -1,4 +1,4 @@
-package org.examole.goodsservice.dto;
+package org.example.goodsservice.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
