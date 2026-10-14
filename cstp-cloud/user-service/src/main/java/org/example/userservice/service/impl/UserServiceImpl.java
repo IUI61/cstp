@@ -111,4 +111,8 @@ public class UserServiceImpl implements UserService {
     public List<User> listByIds(List<Long> ids) {
         return userMapper.selectBatchIds(ids);
     }
+    @Override
+    public User getById(Long id){
+        return userMapper.selectById(id);
+    }
 }

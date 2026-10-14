@@ -15,4 +15,6 @@ public interface UserService {
     Map<String, Object> userLogin(LoginDto loginDto);
     /** 批量按 id 查用户（订单服务要） */
     List<User> listByIds(List<Long> ids);
+
+    User getById(Long id);
 }

@@ -34,4 +34,17 @@ public class UserInnerController {
         }).collect(Collectors.toList());
         return Result.success(briefs);
     }
+    /** 查单个用户简讯（chat-service 创建会话时推送给卖家用） */
+    @GetMapping("/{id}")
+    public Result getById(@PathVariable("id") Long id) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error(404, "用户不存在");
+        }
+        UserBrief b = new UserBrief();
+        b.setId(user.getId());
+        b.setName(user.getName());
+        b.setAvatar(user.getAvatar());
+        return Result.success(b);
+    }
 }

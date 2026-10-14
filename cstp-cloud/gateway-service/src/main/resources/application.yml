@@ -36,3 +36,15 @@ spring:
             - Path=/api/orders/**
           filters:
             - StripPrefix=1
+        # 聊天服务路由（HTTP 接口）
+        - id: chat-route
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/chat/**
+          filters:
+            - StripPrefix=1
+        # 聊天服务路由（WebSocket 长连接）
+        - id: chat-ws-route
+          uri: lb:ws://chat-service
+          predicates:
+            - Path=/ws/**

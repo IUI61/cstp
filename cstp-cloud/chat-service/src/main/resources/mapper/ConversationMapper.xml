@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.chatservice.mapper.ConversationMapper">
+    <select id="getConversationsList" resultType="org.example.chatservice.vo.ConversationsListVo">
+        SELECT c.id conversationId,
+               c.last_message,
+               c.update_time,
+               CASE WHEN c.min_id = #{userId} THEN c.max_id ELSE c.min_id END AS other_id
+        FROM conversation c
+        WHERE c.min_id = #{userId} OR c.max_id = #{userId}
+        ORDER BY c.update_time DESC
+    </select>
+</mapper>

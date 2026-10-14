@@ -22,6 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")// 拦截所有路径
                 .excludePathPatterns("/doc.html",
                         "/webjars/**",
+                        "/uploads/**",
                         "/v3/api-docs/**");
     }
     // 配置静态资源映射：路径来源与上传逻辑保持一致（UploadProperties 统一提供）

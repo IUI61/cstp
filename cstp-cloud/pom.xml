@@ -19,6 +19,7 @@
         <module>goods-service</module>
         <module>order-service</module>
         <module>gateway-service</module>
+        <module>chat-service</module>
     </modules>
     <dependencies>
         <dependency>
