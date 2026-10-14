@@ -1,0 +1,122 @@
+services:
+  nacos:
+    image: nacos/nacos-server:v2.3.2
+    container_name: cstp-nacos
+    environment:
+      - MODE=standalone
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+
+  redis:
+    image: redis:7-alpine
+    container_name: cstp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: cstp-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: cstp-user
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - DB_HOST=host.docker.internal
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - CSTP_UPLOAD_DIR=/data/uploads
+    volumes:
+      - ${UPLOAD_DIR}:/data/uploads
+    depends_on:
+      - nacos
+      - redis
+    ports:
+      - "8081:8081"
+
+  goods-service:
+    build:
+      context: .
+      dockerfile: goods-service/Dockerfile
+    container_name: cstp-goods
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - DB_HOST=host.docker.internal
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - MQ_HOST=rabbitmq
+      - CSTP_UPLOAD_DIR=/data/uploads
+    volumes:
+      - ${UPLOAD_DIR}:/data/uploads
+    depends_on:
+      - nacos
+      - redis
+      - rabbitmq
+    ports:
+      - "8082:8082"
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: cstp-order
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - DB_HOST=host.docker.internal
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - MQ_HOST=rabbitmq
+    depends_on:
+      - nacos
+      - redis
+      - rabbitmq
+    ports:
+      - "8083:8083"
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: chat-service/Dockerfile
+    container_name: cstp-chat
+    environment:
+      - NACOS_ADDR=nacos:8848
+      - DB_HOST=host.docker.internal
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+    depends_on:
+      - nacos
+      - redis
+    ports:
+      - "8084:8084"
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    container_name: cstp-gateway
+    environment:
+      - NACOS_ADDR=nacos:8848
+    depends_on:
+      - nacos
+    ports:
+      - "8080:8080"
+
+volumes:
+  redis-data:
